@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.qcby.mybatis01.mapper.UserMapper">
+
+    <select id="findAll0620"  resultType="com.qcby.mybatis01.entity.User">
+        select *  from user
+    </select>
+</mapper>

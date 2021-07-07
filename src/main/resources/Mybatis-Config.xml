@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+<!--    <plugins>-->
+<!--        <plugin interceptor="com.qcby.mybatis01.plugin.SelfPageInterceptor">-->
+<!--        </plugin>-->
+<!--        <plugin interceptor="com.qcby.mybatis01.plugin.SQlLogPlugin3">-->
+<!--            <property name="testName" value="lxt"/>-->
+<!--            <property name="methodPageFlag" value="Page"/>-->
+<!--        </plugin>-->
+<!--    </plugins>-->
+    <mappers>
+        <mapper resource="mapper/UserMapper.xml"></mapper>
+    </mappers>
+</configuration>
