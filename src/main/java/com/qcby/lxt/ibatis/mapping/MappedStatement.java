@@ -18,12 +18,14 @@ public class MappedStatement {
     private String id;
     private SqlSource sqlSource;
     private SqlCommandType sqlCommandType;
+    private Class<?> resultType;
 
     public MappedStatement(Configuration configuration, String id, SqlSource sqlSource, SqlCommandType sqlCommandType, Class<?> resultType) {
         this.configuration = configuration;
         this.id = id;
         this.sqlSource = sqlSource;
         this.sqlCommandType = sqlCommandType;
+        this.resultType = resultType;
     }
 
     public String getResource() {
@@ -64,5 +66,13 @@ public class MappedStatement {
 
     public void setSqlCommandType(SqlCommandType sqlCommandType) {
         this.sqlCommandType = sqlCommandType;
+    }
+
+    public Class<?> getResultType() {
+        return resultType;
+    }
+
+    public void setResultType(Class<?> resultType) {
+        this.resultType = resultType;
     }
 }

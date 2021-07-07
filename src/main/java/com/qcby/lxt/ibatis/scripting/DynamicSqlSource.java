@@ -16,4 +16,8 @@ public class DynamicSqlSource implements SqlSource{
         this.configuration = configuration;
     }
 
+    @Override
+    public String getMapperSql() {
+        return null;
+    }
 }

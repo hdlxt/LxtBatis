@@ -19,4 +19,17 @@ public class RawSqlSource implements SqlSource{
         SqlSourceBuilder sqlSourceParser = new SqlSourceBuilder(configuration);
         sqlSource = sqlSourceParser.parse(sql, new HashMap<>());
     }
+
+    public SqlSource getSqlSource() {
+        return sqlSource;
+    }
+
+    public void setSqlSource(SqlSource sqlSource) {
+        this.sqlSource = sqlSource;
+    }
+
+    @Override
+    public String getMapperSql() {
+        return this.sqlSource.getMapperSql();
+    }
 }

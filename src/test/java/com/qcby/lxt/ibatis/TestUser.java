@@ -34,6 +34,8 @@ public class TestUser {
 
         List<User> userList = mapper.listAll();
 
+        System.out.println(userList);
+
 
     }
 }

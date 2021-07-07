@@ -19,4 +19,24 @@ public class StaticSqlSource implements SqlSource{
         this.configuration = configuration;
     }
 
+    public String getSql() {
+        return sql;
+    }
+
+    public void setSql(String sql) {
+        this.sql = sql;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    @Override
+    public String getMapperSql() {
+        return this.sql;
+    }
 }

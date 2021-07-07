@@ -6,10 +6,10 @@ import java.sql.SQLException;
 /**
  * 参数处理器
  */
-public class ParameterHandler {
+public class ParameterHandlerbak {
     private PreparedStatement psmt;
 
-    public ParameterHandler(PreparedStatement statement) {
+    public ParameterHandlerbak(PreparedStatement statement) {
         this.psmt = statement;
     }
 

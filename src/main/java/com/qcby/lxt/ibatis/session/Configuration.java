@@ -2,8 +2,16 @@ package com.qcby.lxt.ibatis.session;
 
 import com.qcby.lxt.ibatis.binding.MapperRegistry;
 import com.qcby.lxt.ibatis.executor.Executor;
+import com.qcby.lxt.ibatis.executor.ParameterHandlerbak;
 import com.qcby.lxt.ibatis.executor.SimpleExecutor;
+import com.qcby.lxt.ibatis.executor.parameter.DefaultParameterHandler;
+import com.qcby.lxt.ibatis.executor.parameter.ParameterHandler;
+import com.qcby.lxt.ibatis.executor.resultset.DefaultResultSetHandler;
+import com.qcby.lxt.ibatis.executor.resultset.ResultSetHandler;
+import com.qcby.lxt.ibatis.executor.statement.SimpleStatementHandler;
+import com.qcby.lxt.ibatis.executor.statement.StatementHandler;
 import com.qcby.lxt.ibatis.mapping.MappedStatement;
+import sun.plugin2.main.server.ResultHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +48,16 @@ public class Configuration {
         return mapperRegistry.getMapper(type, sqlSession);
     }
 
+    public boolean hasMapper(Class<?> type) {
+        return mapperRegistry.hasMapper(type);
+    }
+
     public void addMappedStatement(MappedStatement ms) {
         mappedStatements.put(ms.getId(), ms);
+    }
+
+    public boolean hasStatement(String statementName) {
+        return mappedStatements.containsKey(statementName);
     }
 
     public Executor newExecutor() {
@@ -64,12 +80,28 @@ public class Configuration {
         this.useActualParamName = useActualParamName;
     }
 
-    public boolean hasStatement(String statementName) {
-        return mappedStatements.containsKey(statementName);
-    }
+
 
 
     public MappedStatement getMappedStatement(String statementId) {
         return mappedStatements.get(statementId);
+    }
+
+    public StatementHandler newStatementHandler(Executor executor,MappedStatement ms, Object parameter) {
+        StatementHandler statementHandler = new SimpleStatementHandler(executor,ms, parameter);
+//        statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
+        return statementHandler;
+    }
+
+    public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject) {
+        ParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, parameterObject);
+//        parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
+        return parameterHandler;
+    }
+
+    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, ParameterHandler parameterHandler) {
+        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler);
+//        resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+        return resultSetHandler;
     }
 }

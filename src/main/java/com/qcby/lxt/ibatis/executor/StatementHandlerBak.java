@@ -1,17 +1,14 @@
 package com.qcby.lxt.ibatis.executor;
 
 
-import com.qcby.lxt.ibatis.session.Configuration;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
  * 封装JDBC Statement，用于操作数据库
  */
-public class StatementHandler {
+public class StatementHandlerBak {
     private ResultSetHandler resultSetHandler = new ResultSetHandler();
 
     public <T> T query(String statement, Object[] parameter, Class pojo){
@@ -22,7 +19,7 @@ public class StatementHandler {
         try {
             conn = getConnection();
             preparedStatement = conn.prepareStatement(statement);
-            ParameterHandler parameterHandler = new ParameterHandler(preparedStatement);
+            ParameterHandlerbak parameterHandler = new ParameterHandlerbak(preparedStatement);
             parameterHandler.setParameters(parameter);
             preparedStatement.execute();
             try {

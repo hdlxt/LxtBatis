@@ -5,6 +5,7 @@ import com.qcby.lxt.ibatis.session.SqlSession;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @className: MapperProxyFactory
@@ -15,7 +16,7 @@ import java.util.Map;
 public class MapperProxyFactory<T> {
 
     private final Class<T> mapperInterface;
-    private Map<Method, MapperMethod> methodCache;
+    private Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();
 
 
     public MapperProxyFactory(Class<T> mapperInterface) {

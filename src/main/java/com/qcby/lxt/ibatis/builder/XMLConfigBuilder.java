@@ -17,7 +17,6 @@ import java.io.InputStream;
 public class XMLConfigBuilder extends BaseBuilder{
 
     private XPathParser parser;
-    private Configuration configuration;
 
     public XMLConfigBuilder(InputStream inputStream) {
         super(new Configuration());

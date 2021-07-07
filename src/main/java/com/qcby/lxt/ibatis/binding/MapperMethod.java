@@ -19,11 +19,13 @@ import java.util.Optional;
 public class MapperMethod {
 
     private MappedStatement ms;
+    private boolean returnsMany;
     private ParamNameResolver paramNameResolver;
 
     public <T> MapperMethod(Class<T> mapperInterface, Method method, Configuration configuration) {
         paramNameResolver = new ParamNameResolver(configuration,method);
         ms = resolveMappedStatement(mapperInterface,method.getName(),configuration);
+        this.returnsMany = true;
     }
 
     public Object execute(SqlSession sqlSession, Object[] args) {
@@ -36,8 +38,13 @@ public class MapperMethod {
             case DELETE:
                 break;
             case SELECT:
-                Object param = paramNameResolver.getNamedParams(args);
-                result = sqlSession.selectOne(ms.getId(),param);
+                if (returnsMany) {
+                    Object param = paramNameResolver.getNamedParams(args);
+                    result = sqlSession.selectList(ms.getId(), param);
+                }else{
+                    Object param = paramNameResolver.getNamedParams(args);
+                    result = sqlSession.selectOne(ms.getId(),param);
+                }
                 break;
             default:
                 throw new LxtBatisException("Unknown execution method for: " + ms.getId());

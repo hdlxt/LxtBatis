@@ -21,20 +21,21 @@ import static com.sun.beans.finder.ClassFinder.resolveClass;
  **/
 public class XMLStatementBuilder extends BaseBuilder{
     private XNode context;
-    private Configuration configuration;
 
     public XMLStatementBuilder(Configuration configuration, XNode context) {
         super(configuration);
         this.context = context;
     }
 
-    public void parseStatementNode() {
-        String id = context.getStringAttribute("id");
-        String nodeName = context.getNode().getNodeName();
-        SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
-        boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
+    public void parseStatementNode(String namespace) {
 
-        String keyStatementId = id;
+        String id = context.getStringAttribute("id");
+
+        String nodeName = context.getNode().getNodeName();
+
+        SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
+
+        String keyStatementId = namespace + "." + id;
 
         SqlSource sqlSource = createSqlSource(configuration, context);
 
@@ -42,7 +43,7 @@ public class XMLStatementBuilder extends BaseBuilder{
 
         Class<?> resultTypeClass = resolveClass(resultType);
 
-        addMappedStatement(id, sqlSource, sqlCommandType,resultTypeClass);
+        addMappedStatement(keyStatementId, sqlSource, sqlCommandType,resultTypeClass);
     }
 
     public MappedStatement addMappedStatement(
@@ -82,5 +83,6 @@ public class XMLStatementBuilder extends BaseBuilder{
             throw new LxtBatisException("Error resolving class. Cause: " + e, e);
         }
     }
+
 
 }
