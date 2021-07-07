@@ -2,6 +2,7 @@ package com.qcby.lxt.ibatis.binding;
 
 import com.qcby.lxt.ibatis.exception.LxtBatisException;
 import com.qcby.lxt.ibatis.session.Configuration;
+import com.qcby.lxt.ibatis.session.SqlSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,18 @@ public class MapperRegistry {
 
     public <T> boolean hasMapper(Class<T> type) {
         return knownMappers.containsKey(type);
+    }
+
+    public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
+        final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
+        if (mapperProxyFactory == null) {
+            throw new LxtBatisException("Type " + type + " is not known to the MapperRegistry.");
+        }
+        try {
+            return mapperProxyFactory.newInstance(sqlSession);
+        } catch (Exception e) {
+            throw new LxtBatisException("Error getting mapper instance. Cause: " + e, e);
+        }
     }
 
     public <T> void addMapper(Class<T> type) {

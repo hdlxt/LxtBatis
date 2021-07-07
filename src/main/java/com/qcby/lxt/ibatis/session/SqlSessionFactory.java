@@ -7,4 +7,5 @@ package com.qcby.lxt.ibatis.session;
  * @create: 2021-07-06 11:00
  **/
 public interface SqlSessionFactory {
+    SqlSession openSession();
 }

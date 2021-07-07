@@ -1,5 +1,9 @@
 package com.qcby.lxt.ibatis.session;
 
+import com.qcby.lxt.ibatis.exception.LxtBatisException;
+import com.qcby.lxt.ibatis.executor.Executor;
+
+
 /**
  * @className: DefaultSqlSessionFactory
  * @description:
@@ -8,8 +12,24 @@ package com.qcby.lxt.ibatis.session;
  **/
 public class DefaultSqlSessionFactory implements SqlSessionFactory{
 
+    private Configuration configuration;
 
     public DefaultSqlSessionFactory(Configuration config) {
+        this.configuration = config;
+    }
 
+
+    @Override
+    public SqlSession openSession() {
+        return openSessionFromDataSource();
+    }
+
+    private SqlSession openSessionFromDataSource() {
+        try {
+            final Executor executor = configuration.newExecutor();
+            return new DefaultSqlSession(configuration, executor);
+        } catch (Exception e) {
+            throw new LxtBatisException("Error opening session.  Cause: " + e, e);
+        }
     }
 }

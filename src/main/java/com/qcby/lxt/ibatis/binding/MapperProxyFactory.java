@@ -2,7 +2,9 @@ package com.qcby.lxt.ibatis.binding;
 
 import com.qcby.lxt.ibatis.session.SqlSession;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Map;
 
 /**
  * @className: MapperProxyFactory
@@ -13,6 +15,8 @@ import java.lang.reflect.Proxy;
 public class MapperProxyFactory<T> {
 
     private final Class<T> mapperInterface;
+    private Map<Method, MapperMethod> methodCache;
+
 
     public MapperProxyFactory(Class<T> mapperInterface) {
         this.mapperInterface = mapperInterface;
@@ -24,7 +28,7 @@ public class MapperProxyFactory<T> {
 
 
     protected T newInstance(SqlSession sqlSession) {
-        MapperProxy<T> mapperProxy = new MapperProxy<>(sqlSession, mapperInterface);
+        MapperProxy<T> mapperProxy = new MapperProxy<>(sqlSession, mapperInterface,methodCache);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, mapperProxy);
     }
 }

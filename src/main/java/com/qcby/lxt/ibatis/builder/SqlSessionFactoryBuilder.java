@@ -24,10 +24,7 @@ public class SqlSessionFactoryBuilder{
             throw new LxtBatisException("Error building SqlSession.", e);
         }
     }
-    public SqlSessionFactory build(String configPath) {
-        InputStream inputStream = Resources.getResourceAsStream(configPath);
-        return build(inputStream);
-    }
+
 
     public SqlSessionFactory build(Configuration config) {
         return new DefaultSqlSessionFactory(config);
