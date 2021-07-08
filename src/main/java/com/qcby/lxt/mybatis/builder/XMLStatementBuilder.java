@@ -10,8 +10,6 @@ import com.qcby.lxt.mybatis.session.Configuration;
 
 import java.util.Locale;
 
-import static com.sun.beans.finder.ClassFinder.resolveClass;
-
 /**
  * @className: XMLStatementBuilder
  * @description:

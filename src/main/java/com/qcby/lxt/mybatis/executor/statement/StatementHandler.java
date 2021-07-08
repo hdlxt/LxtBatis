@@ -1,7 +1,5 @@
 package com.qcby.lxt.mybatis.executor.statement;
 
-import sun.plugin2.main.server.ResultHandler;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;

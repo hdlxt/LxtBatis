@@ -7,7 +7,9 @@ import com.qcby.lxt.mybatis.mapping.MappedStatement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +60,8 @@ public class DefaultResultSetHandler implements ResultSetHandler{
      */
     private Object getResult(ResultSet rs, Field field) throws SQLException {
         Class type = field.getType();
-//        String dataName = HumpToUnderline(field.getName()); // 驼峰转下划线
-        String dataName = field.getName(); // 驼峰转下划线
+        String dataName = HumpToUnderline(field.getName()); // 驼峰转下划线
+//        String dataName = field.getName(); // 驼峰转下划线
         if (Integer.class == type ) {
             return rs.getInt(dataName);
         }else if (String.class == type) {

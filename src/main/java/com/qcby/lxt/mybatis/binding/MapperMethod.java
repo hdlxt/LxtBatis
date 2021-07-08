@@ -5,8 +5,13 @@ import com.qcby.lxt.mybatis.mapping.MappedStatement;
 import com.qcby.lxt.mybatis.reflection.ParamNameResolver;
 import com.qcby.lxt.mybatis.session.Configuration;
 import com.qcby.lxt.mybatis.session.SqlSession;
+import sun.plugin2.main.server.ResultHandler;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @className: MapperMethod
@@ -17,13 +22,11 @@ import java.lang.reflect.Method;
 public class MapperMethod {
 
     private MappedStatement ms;
-    private boolean returnsMany;
-    private ParamNameResolver paramNameResolver;
+    private MethodSignature method;
 
     public <T> MapperMethod(Class<T> mapperInterface, Method method, Configuration configuration) {
-        paramNameResolver = new ParamNameResolver(configuration,method);
-        ms = resolveMappedStatement(mapperInterface,method.getName(),configuration);
-        this.returnsMany = true;
+        ms = resolveMappedStatement(mapperInterface, method.getName(), configuration);
+        this.method = new MethodSignature(configuration, mapperInterface, method);
     }
 
     public Object execute(SqlSession sqlSession, Object[] args) {
@@ -36,12 +39,12 @@ public class MapperMethod {
             case DELETE:
                 break;
             case SELECT:
-                if (returnsMany) {
-                    Object param = paramNameResolver.getNamedParams(args);
+                if (method.returnsMany()) {
+                    Object param = method.convertArgsToSqlCommandParam(args);
                     result = sqlSession.selectList(ms.getId(), param);
-                }else{
-                    Object param = paramNameResolver.getNamedParams(args);
-                    result = sqlSession.selectOne(ms.getId(),param);
+                } else {
+                    Object param = method.convertArgsToSqlCommandParam(args);
+                    result = sqlSession.selectOne(ms.getId(), param);
                 }
                 break;
             default:
@@ -50,11 +53,45 @@ public class MapperMethod {
         return result;
     }
 
-    private MappedStatement resolveMappedStatement(Class<?> mapperInterface, String methodName,Configuration configuration) {
+    private MappedStatement resolveMappedStatement(Class<?> mapperInterface, String methodName, Configuration configuration) {
         String statementId = mapperInterface.getName() + "." + methodName;
         if (configuration.hasStatement(statementId)) {
             return configuration.getMappedStatement(statementId);
         }
         return null;
     }
+
+
+    public static class MethodSignature {
+        private final boolean returnsMany;
+        private final Class<?> returnType;
+        private final ParamNameResolver paramNameResolver;
+        public MethodSignature(Configuration configuration, Class<?> mapperInterface, Method method) {
+            Type returnType = method.getGenericReturnType();;
+            if (returnType instanceof Class<?>) {
+                this.returnType = (Class<?>) returnType;
+            } else {
+                this.returnType = method.getReturnType();
+            }
+            this.returnsMany = isCollection(this.returnType) || this.returnType.isArray();
+            this.paramNameResolver = new ParamNameResolver(configuration, method);
+        }
+
+        public <T> boolean isCollection(Class<T> type) {
+            return Collection.class.isAssignableFrom(type);
+        }
+        public Class<?> getReturnType() {
+            return returnType;
+        }
+
+        public boolean returnsMany() {
+            return returnsMany;
+        }
+
+        public Object convertArgsToSqlCommandParam(Object[] args) {
+            return paramNameResolver.getNamedParams(args);
+        }
+
+    }
+
 }

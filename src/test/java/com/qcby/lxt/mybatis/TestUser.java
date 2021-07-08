@@ -20,9 +20,7 @@ import java.util.List;
 public class TestUser {
 
     @Test
-    public void test(){
-//        System.out.println("hello world!");
-
+    public void testList(){
         // 配置文件名称
         InputStream inputStream = Resources.getResourceAsStream("Mybatis-Config.xml");
 
@@ -36,6 +34,22 @@ public class TestUser {
 
         System.out.println(userList);
 
+    }
+
+    @Test
+    public void testOne(){
+        // 配置文件名称
+        InputStream inputStream = Resources.getResourceAsStream("Mybatis-Config.xml");
+
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+        User user = mapper.getById();
+
+        System.out.println(user);
 
     }
 }

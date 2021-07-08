@@ -10,7 +10,6 @@ import com.qcby.lxt.mybatis.executor.resultset.ResultSetHandler;
 import com.qcby.lxt.mybatis.executor.statement.SimpleStatementHandler;
 import com.qcby.lxt.mybatis.executor.statement.StatementHandler;
 import com.qcby.lxt.mybatis.mapping.MappedStatement;
-import sun.plugin2.main.server.ResultHandler;
 
 import java.util.HashMap;
 import java.util.Map;
